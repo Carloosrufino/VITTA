@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="VITTA — informação, organização e apoio para uma relação mais saudável com a alimentação e as emoções." />
+    <title>VITTA | Mais cuidado. Mais vida.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg fixed-top bg-white border-bottom">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="#inicio" aria-label="VITTA início">
+          <img class="brand-logo" src="assets/logo-vitta.jpg" alt="Logo VITTA" /><span class="brand-name">VITTA</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-label="Abrir menu">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="menu" class="collapse navbar-collapse menu-panel">
+          <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+            <li><a class="nav-link" href="#diario">Diário</a></li>
+            <li><a class="nav-link" href="#agenda">Agenda</a></li>
+            <li><a class="nav-link" href="#conteudos">Conteúdos</a></li>
+            <li><a class="nav-link" href="#apoio">Apoio</a></li>
+            <li><a class="btn btn-primary rounded-pill px-4 ms-lg-2" href="#diario">Começar agora</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <section id="inicio" class="hero-section screen" data-screen="inicio">
+        <div class="container py-5">
+          <div class="row align-items-center g-5">
+            <div class="col-lg-7">
+              <p class="eyebrow">Cuidado, informação e acolhimento</p>
+              <h1>Mais cuidado.<br /><span>Mais vida.</span></h1>
+              <p class="hero-copy">Um espaço seguro para aprender, acompanhar suas emoções e organizar a rotina de cuidado com mais leveza.</p>
+              <div class="d-flex flex-wrap gap-3">
+                <a class="btn btn-primary btn-lg rounded-pill px-4" href="#diario">Registrar como estou</a>
+                <a class="btn btn-outline-primary btn-lg rounded-pill px-4" href="#conteudos">Conhecer o VITTA</a>
+              </div>
+              <p class="small text-muted mt-4 mb-0"><span class="dot"></span> Informação não substitui acompanhamento profissional.</p>
+            </div>
+            <div class="col-lg-5">
+              <div class="hero-art" aria-hidden="true"><div class="sun"></div><div class="leaf leaf-one"></div><div class="leaf leaf-two"></div><div class="heart">♡</div><div class="art-note">Respire.<br />Você não está só.</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-pad bg-soft screen" data-screen="inicio" aria-labelledby="como-funciona">
+        <div class="container">
+          <div class="text-center section-heading"><p class="eyebrow">Um passo de cada vez</p><h2 id="como-funciona">Cuidar também é se conhecer</h2><p>Ferramentas simples para apoiar sua rotina e facilitar a busca por informação confiável.</p></div>
+          <div class="row g-4 mt-2">
+            <div class="col-md-4"><article class="feature-card"><div class="icon-bubble lilac">♡</div><h3>Observe suas emoções</h3><p>Registre como você está se sentindo e identifique padrões ao longo do tempo.</p><a href="#diario">Abrir diário →</a></article></div>
+            <div class="col-md-4"><article class="feature-card"><div class="icon-bubble blue">□</div><h3>Organize sua rotina</h3><p>Tenha consultas, lembretes e pequenos hábitos importantes em um só lugar.</p><a href="#agenda">Ver agenda →</a></article></div>
+            <div class="col-md-4"><article class="feature-card"><div class="icon-bubble peach">i</div><h3>Encontre informação</h3><p>Acesse conteúdos educativos e caminhos para buscar apoio qualificado.</p><a href="#conteudos">Ler conteúdos →</a></article></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="diario" class="section-pad screen" data-screen="diario">
+        <div class="container"><div class="row g-5 align-items-start"><div class="col-lg-5"><p class="eyebrow">Diário de emoções</p><h2>Como você está hoje?</h2><p class="lead-muted">Não existe resposta certa. Escolha o que mais se aproxima do seu momento e escreva, se quiser, um pouco sobre ele.</p><div id="emotionOptions" class="emotion-grid mt-4" role="group" aria-label="Escolha uma emoção"><button data-emotion="Tranquilo" class="emotion-btn">☀️<span>Tranquilo</span></button><button data-emotion="Bem" class="emotion-btn">🌱<span>Bem</span></button><button data-emotion="Cansado" class="emotion-btn">🌙<span>Cansado</span></button><button data-emotion="Ansioso" class="emotion-btn">🌊<span>Ansioso</span></button><button data-emotion="Triste" class="emotion-btn">☁️<span>Triste</span></button><button data-emotion="Outro" class="emotion-btn">✦<span>Outro</span></button></div></div><div class="col-lg-7"><div class="panel-card"><label for="emotionNote" class="form-label">Quer registrar mais alguma coisa?</label><textarea id="emotionNote" class="form-control" rows="5" placeholder="Escreva livremente..." maxlength="500"></textarea><div class="d-flex justify-content-between align-items-center mt-3"><span id="selectedEmotion" class="selected-label">Nenhuma emoção selecionada</span><button id="saveEmotion" class="btn btn-primary rounded-pill px-4">Salvar registro</button></div><div id="emotionFeedback" class="feedback mt-3" role="status"></div></div><div id="lastEmotion" class="last-record mt-3"></div></div></div></div>
+      </section>
+
+      <section id="agenda" class="section-pad bg-soft"><div class="container"><div class="row g-4"><div class="col-lg-5"><p class="eyebrow">Organização da rotina</p><h2>Minha agenda de cuidado</h2><p class="lead-muted">Use este espaço para lembrar de encontros e atividades importantes.</p><div class="panel-card mt-4"><form id="appointmentForm"><label class="form-label" for="appointmentTitle">O que você quer lembrar?</label><input id="appointmentTitle" class="form-control mb-3" placeholder="Ex.: consulta com nutricionista" required /><div class="row g-2"><div class="col-7"><label class="form-label" for="appointmentDate">Data</label><input id="appointmentDate" type="date" class="form-control" required /></div><div class="col-5"><label class="form-label" for="appointmentTime">Horário</label><input id="appointmentTime" type="time" class="form-control" /></div></div><button class="btn btn-primary rounded-pill w-100 mt-3">Adicionar à agenda</button></form></div></div><div class="col-lg-7"><div class="d-flex justify-content-between align-items-center mb-3"><h3 class="mb-0">Próximos lembretes</h3><span class="badge rounded-pill text-bg-light">salvo neste dispositivo</span></div><div id="appointmentList" class="appointment-list"></div></div></div></div></section>
+
+      <section id="conteudos" class="section-pad"><div class="container"><div class="section-heading"><p class="eyebrow">Informação confiável</p><h2>Conteúdos para você</h2><p>Aprender sobre saúde é uma forma de cuidado. Explore temas introdutórios e acolhedores.</p></div><div class="row g-4 mt-2"><div class="col-md-4"><article class="content-card content-lilac"><span>GUIA</span><h3>O que são transtornos alimentares?</h3><p>Entenda os sinais, os tipos mais conhecidos e por que informação responsável importa.</p><button class="read-more" data-modal-title="O que são transtornos alimentares?" data-modal-text="Transtornos alimentares são condições de saúde que envolvem uma relação difícil com a alimentação, o corpo e/ou o peso. Eles podem afetar pessoas de diferentes idades e não são uma escolha. Identificar sinais e conversar com um profissional são passos importantes.">Ler conteúdo →</button></article></div><div class="col-md-4"><article class="content-card content-blue"><span>ACOLHIMENTO</span><h3>Quando é hora de pedir ajuda?</h3><p>Buscar apoio não é fraqueza. Conheça alguns sinais de que você merece cuidado.</p><button class="read-more" data-modal-title="Quando é hora de pedir ajuda?" data-modal-text="Se pensamentos sobre comida, peso ou corpo ocupam muito espaço, se há culpa intensa ao comer ou se sua rotina e seus relacionamentos estão sendo afetados, vale conversar com alguém de confiança e procurar ajuda profissional.">Ler conteúdo →</button></article></div><div class="col-md-4"><article class="content-card content-peach"><span>ROTINA</span><h3>Pequenos hábitos de autocuidado</h3><p>Ideias gentis para construir uma rotina que respeite seu corpo e seu momento.</p><button class="read-more" data-modal-title="Pequenos hábitos de autocuidado" data-modal-text="Comece pequeno: faça pausas, observe suas emoções sem julgamento, mantenha contatos de apoio por perto e reserve momentos para descanso. O autocuidado não precisa ser perfeito para ser significativo.">Ler conteúdo →</button></article></div></div></div></section>
+
+      <section id="apoio" class="support-section"><div class="container py-5"><div class="row align-items-center g-4"><div class="col-lg-8"><p class="eyebrow">Você não precisa passar por isso sozinho</p><h2>Procure apoio quando precisar.</h2><p class="mb-0">O VITTA é um recurso educativo e complementar. Para diagnóstico e tratamento, converse com profissionais qualificados. Em uma situação de emergência, procure o serviço de emergência da sua região.</p></div><div class="col-lg-4 text-lg-end"><a class="btn btn-dark rounded-pill px-4" href="https://www.gov.br/saude/pt-br" target="_blank" rel="noreferrer">Encontrar serviços de saúde ↗</a></div></div></div></section>
+    </main>
+    <div class="section-pager" aria-label="Navegação entre sessões"><div class="container d-flex align-items-center justify-content-between gap-3"><button id="prevSection" class="pager-btn" type="button" onclick="previousVittaSection()">← Anterior</button><div class="pager-status"><span id="sectionCounter">1 de 5</span><span id="sectionTitle">Início</span></div><button id="nextSection" class="pager-btn primary" type="button" onclick="nextVittaSection()">Próxima seção →</button></div></div>
+
+    <footer class="py-4 border-top"><div class="container d-flex flex-wrap justify-content-between gap-2"><span class="brand-footer">VITTA</span><span class="text-muted small">Mais cuidado. Mais vida. · Projeto de extensão</span><span class="text-muted small">© <span id="year"></span></span></div></footer>
+    <div class="modal fade" id="contentModal" tabindex="-1" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h5 id="modalTitle" class="modal-title"></h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button></div><div class="modal-body" id="modalText"></div><div class="modal-footer"><button type="button" class="btn btn-primary rounded-pill px-4" data-bs-dismiss="modal">Entendi</button></div></div></div></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><script src="script.js?v=3"></script>
+  </body>
+</html>
