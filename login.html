@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Entrar | VITTA</title>
+    <link rel="icon" type="image/jpeg" href="assets/logo-vitta.jpg" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css?v=2" />
+  </head>
+  <body class="login-page">
+    <main class="login-layout"><section class="login-brand"><a href="index.html" class="login-logo"><img src="assets/logo-vitta.jpg" alt="Logo VITTA" /></a><p class="eyebrow">Seu espaço de cuidado</p><h1>Volte para o VITTA.</h1><p>Entre para guardar seu diário de emoções e organizar sua agenda de cuidado.</p><a href="index.html" class="back-home">← Voltar para o início</a></section><section class="login-card"><div class="login-card-heading"><p class="eyebrow">Área pessoal</p><h2 id="loginTitle">Entrar</h2><p id="loginSubtitle">Use seu usuário e senha para continuar.</p></div><form id="loginPageForm"><label for="loginUsername">Usuário</label><input id="loginUsername" autocomplete="username" minlength="3" maxlength="40" required /><label for="loginPassword">Senha</label><input id="loginPassword" type="password" autocomplete="current-password" minlength="4" required /><button id="loginSubmit" class="btn btn-primary rounded-pill w-100" type="submit">Entrar</button><button id="registerSubmit" class="btn btn-outline-primary rounded-pill w-100" type="button">Criar cadastro</button><div id="loginFeedback" class="auth-feedback" role="status"></div></form><p class="login-note">Não é necessário informar e-mail.</p></section></main><script src="login.js?v=1"></script>
+  </body>
+</html>
