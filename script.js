@@ -210,7 +210,7 @@ const kidsCopy = [
 ];
 function applyKidsCopy(enabled) { kidsCopy.forEach(([selector, texts]) => { document.querySelectorAll(selector).forEach((element, index) => { if (!element.dataset.adultKidsHtml) element.dataset.adultKidsHtml = element.innerHTML; element.innerHTML = enabled ? (texts[index] || texts[0]) : element.dataset.adultKidsHtml; }); }); }
 applyKidsCopy(savedKidsMode);
-modeToggle?.addEventListener('click', () => applyKidsCopy(!document.body.classList.contains('kids-mode')));
+modeToggle?.addEventListener('click', () => applyKidsCopy(document.body.classList.contains('kids-mode')));
 function syncKidsVisibility() { const enabled = document.body.classList.contains('kids-mode'); document.querySelectorAll('a[href="#kids"]').forEach((link) => link.setAttribute('aria-hidden', String(!enabled))); if (!enabled && (sectionGroups[currentSection]?.hash === 'kids' || window.location.hash === '#kids')) showSection(0, false); }
 syncKidsVisibility();
 modeToggle?.addEventListener('click', () => setTimeout(syncKidsVisibility, 0));
@@ -283,3 +283,168 @@ if (kindnessButton && kindnessMessage) {
   let discoveries = 0;
   kindnessButton.addEventListener('click', () => { discoveries += 1; kindnessMessage.classList.remove('reveal'); void kindnessMessage.offsetWidth; kindnessMessage.textContent = cards[Math.floor(Math.random() * cards.length)]; kindnessMessage.classList.add('reveal'); document.querySelector('#kindnessScore').textContent = `⭐ ${discoveries} descoberta${discoveries === 1 ? '' : 's'}`; });
 }
+
+// Jogo da cesta: funciona dentro da área Kids sem alterar os outros jogos.
+(() => {
+  const arena = document.querySelector('#catcherArena');
+  const basket = document.querySelector('#catcherBasket');
+  const itemsLayer = document.querySelector('#catcherItems');
+  const overlay = document.querySelector('#catcherOverlay');
+  const startButton = document.querySelector('#catcherStart');
+  if (!arena || !basket || !itemsLayer || !overlay || !startButton) return;
+
+  const scoreOutput = document.querySelector('#catcherScore');
+  const livesOutput = document.querySelector('#catcherLives');
+  const statusOutput = document.querySelector('#catcherStatus');
+  const overlayTitle = document.querySelector('#catcherOverlayTitle');
+  const overlayText = document.querySelector('#catcherOverlayText');
+  const food = ['🍎', '🍌', '🍓', '🥕', '🍞', '🍊', '🥑', '🍇', '🧀', '🥨'];
+  const basketWidth = 58;
+  let running = false;
+  let raf = 0;
+  let lastTime = 0;
+  let spawnElapsed = 0;
+  let score = 0;
+  let lives = 3;
+  let basketX = 0.5;
+  let direction = 0;
+  let pointerIsDown = false;
+  let objects = [];
+
+  function positionBasket() {
+    const half = basketWidth / 2;
+    const x = Math.max(half, Math.min(arena.clientWidth - half, basketX * arena.clientWidth));
+    basket.style.left = `${x}px`;
+  }
+  function showLives() {
+    livesOutput.textContent = `${'❤️'.repeat(lives)}${'🤍'.repeat(3 - lives)}`;
+    livesOutput.setAttribute('aria-label', `${lives} ${lives === 1 ? 'vida' : 'vidas'}`);
+  }
+  function clearObjects() {
+    objects.forEach((object) => object.element.remove());
+    objects = [];
+  }
+  function reset() {
+    cancelAnimationFrame(raf);
+    running = false;
+    lastTime = 0;
+    spawnElapsed = 0;
+    score = 0;
+    lives = 3;
+    basketX = 0.5;
+    direction = 0;
+    pointerIsDown = false;
+    clearObjects();
+    scoreOutput.textContent = '0';
+    showLives();
+    positionBasket();
+  }
+  function endGame() {
+    running = false;
+    cancelAnimationFrame(raf);
+    direction = 0;
+    overlay.hidden = false;
+    overlayTitle.textContent = 'Que boa brincadeira!';
+    overlayText.textContent = `Você fez ${score} ${score === 1 ? 'ponto' : 'pontos'}. Obrigado por jogar — cada tentativa é uma aventura!`;
+    startButton.textContent = 'Jogar de novo';
+    statusOutput.textContent = `Fim da rodada. Você fez ${score} ${score === 1 ? 'ponto' : 'pontos'}. Que bom que você brincou!`;
+    startButton.focus();
+  }
+  function startGame() {
+    reset();
+    running = true;
+    overlay.hidden = true;
+    statusOutput.textContent = 'Rodada iniciada. Pegue as comidas e desvie das bombas!';
+    arena.focus({ preventScroll: true });
+    raf = requestAnimationFrame(frame);
+  }
+  function spawn() {
+    const isBomb = Math.random() < 0.2;
+    const element = document.createElement('span');
+    element.className = 'catcher-item';
+    element.textContent = isBomb ? '💣' : food[Math.floor(Math.random() * food.length)];
+    element.setAttribute('aria-hidden', 'true');
+    const item = { element, x: 24 + Math.random() * Math.max(1, arena.clientWidth - 48), y: -48, isBomb };
+    itemsLayer.append(element);
+    objects.push(item);
+  }
+  function frame(time) {
+    if (!running) return;
+    const dt = Math.min((time - (lastTime || time)) / 1000, 0.04);
+    lastTime = time;
+    const width = arena.clientWidth;
+    if (direction) basketX += direction * 0.62 * dt;
+    basketX = Math.max((basketWidth / 2) / width, Math.min(1 - (basketWidth / 2) / width, basketX));
+    positionBasket();
+
+    const speed = 155 + Math.min(score, 40) * 4;
+    const spawnEvery = Math.max(420, 1050 - score * 15);
+    spawnElapsed += dt * 1000;
+    if (spawnElapsed >= spawnEvery) {
+      spawnElapsed %= spawnEvery;
+      spawn();
+    }
+
+    const floorY = arena.clientHeight - 58;
+    const basketCenter = basketX * width;
+    objects = objects.filter((item) => {
+      item.y += speed * dt;
+      item.element.style.transform = `translate(${item.x - 23}px, ${item.y}px)`;
+      const touchingBasket = item.y + 38 >= floorY && item.y <= floorY + 42 && Math.abs(item.x - basketCenter) < 43;
+      if (touchingBasket) {
+        item.element.remove();
+        if (item.isBomb) {
+          lives -= 1;
+          showLives();
+          statusOutput.textContent = lives ? `Ops, uma bomba! Restam ${lives} ${lives === 1 ? 'vida' : 'vidas'}. Continue brincando!` : 'A rodada terminou. Obrigado por brincar!';
+          if (!lives) endGame();
+        } else {
+          score += 1;
+          scoreOutput.textContent = String(score);
+          statusOutput.textContent = `${item.element.textContent} Ponto! Você tem ${score} ${score === 1 ? 'ponto' : 'pontos'}.`;
+        }
+        return false;
+      }
+      if (item.y > arena.clientHeight) { item.element.remove(); return false; }
+      return true;
+    });
+    if (running) raf = requestAnimationFrame(frame);
+  }
+  function moveByPointer(event) {
+    const bounds = arena.getBoundingClientRect();
+    basketX = (event.clientX - bounds.left) / bounds.width;
+    positionBasket();
+  }
+
+  startButton.addEventListener('click', startGame);
+  arena.addEventListener('pointerdown', (event) => { if (!running) return; pointerIsDown = true; arena.setPointerCapture?.(event.pointerId); moveByPointer(event); });
+  arena.addEventListener('pointermove', (event) => { if (running && pointerIsDown) moveByPointer(event); });
+  arena.addEventListener('pointerup', () => { pointerIsDown = false; });
+  arena.addEventListener('pointercancel', () => { pointerIsDown = false; });
+  arena.addEventListener('keydown', (event) => {
+    if (['ArrowLeft', 'ArrowRight', 'a', 'A', 'd', 'D'].includes(event.key)) event.preventDefault();
+    if (event.key === 'ArrowLeft' || event.key.toLowerCase() === 'a') direction = -1;
+    if (event.key === 'ArrowRight' || event.key.toLowerCase() === 'd') direction = 1;
+  });
+  arena.addEventListener('keyup', (event) => {
+    if (['ArrowLeft', 'ArrowRight', 'a', 'A', 'd', 'D'].includes(event.key)) event.preventDefault();
+    if ((event.key === 'ArrowLeft' || event.key.toLowerCase() === 'a') && direction < 0) direction = 0;
+    if ((event.key === 'ArrowRight' || event.key.toLowerCase() === 'd') && direction > 0) direction = 0;
+  });
+  window.addEventListener('keyup', (event) => {
+    if (event.key === 'ArrowLeft' || event.key.toLowerCase() === 'a' || event.key === 'ArrowRight' || event.key.toLowerCase() === 'd') direction = 0;
+  });
+  window.addEventListener('blur', () => { direction = 0; pointerIsDown = false; });
+  window.addEventListener('resize', positionBasket);
+  document.querySelector('#catcherLeft')?.addEventListener('pointerdown', (event) => { event.preventDefault(); direction = -1; });
+  document.querySelector('#catcherRight')?.addEventListener('pointerdown', (event) => { event.preventDefault(); direction = 1; });
+  ['#catcherLeft', '#catcherRight'].forEach((selector) => {
+    const button = document.querySelector(selector);
+    button?.addEventListener('pointerup', () => { direction = 0; });
+    button?.addEventListener('pointercancel', () => { direction = 0; });
+    button?.addEventListener('pointerleave', () => { direction = 0; });
+    button?.addEventListener('click', () => { basketX += selector === '#catcherLeft' ? -0.12 : 0.12; positionBasket(); });
+  });
+  showLives();
+  positionBasket();
+})();
