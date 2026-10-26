@@ -21,6 +21,7 @@ Depois acesse `http://localhost:8000`.
 - Layout adaptado para celular e computador.
 - Logo oficial do VITTA aplicada no cabeçalho.
 - Navegação por sessões com botões de avanço e retorno.
+- Jogo da cesta na área Kids, com comidas que valem pontos, bombas que retiram vidas e dificuldade progressiva.
 
 Sem configurar o banco, o site continua usando `localStorage` apenas neste navegador.
 
@@ -35,6 +36,10 @@ Sem configurar o banco, o site continua usando `localStorage` apenas neste naveg
 O botão **Entrar** abre `login.html`, que possui os fluxos de login e cadastro e retorna para `index.html` após o sucesso.
 
 O navegador continua usando JavaScript; os arquivos PHP da pasta `api/` fazem a ponte segura com o MySQL. Sem preencher `api/config.php`, o site continua funcionando localmente com `localStorage`, mas não sincroniza dados online.
+
+### Jogo da cesta (área Kids)
+
+Ative **Modo Kids** e abra **Kids** no menu ou navegue até essa seção. Pressione **Começar**; use as setas **←/→** ou **A/D** para mover a cesta no teclado. Em telas sensíveis ao toque, arraste a cesta ou toque nos botões de direção. Cada comida vale um ponto; cada bomba reduz uma vida. A rodada termina após três bombas e pode ser reiniciada pelo botão **Jogar de novo**.
 
 ### Diário alimentar em um banco já existente
 
