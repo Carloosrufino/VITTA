@@ -20,4 +20,138 @@ body{min-height:100vh;display:flex;flex-direction:column}main{flex:1}footer{marg
 .login-page{min-height:100vh;background:linear-gradient(135deg,#edf4ff,#f1edff);display:block}.login-layout{min-height:100vh;max-width:1080px;margin:0 auto;padding:48px 24px;display:grid;grid-template-columns:1fr 420px;gap:80px;align-items:center}.login-brand{padding:20px}.login-logo{display:inline-block;margin-bottom:42px}.login-logo img{width:92px;height:92px;object-fit:cover;border-radius:24px;border:4px solid #fff;box-shadow:0 10px 26px #7560c926}.login-brand h1{font-family:'Playfair Display',serif;font-size:clamp(2.7rem,5vw,4.8rem);line-height:1.05;color:#37314f;margin-bottom:18px}.login-brand>p:not(.eyebrow){max-width:440px;color:#666276;font-size:1.1rem;line-height:1.7}.back-home{display:inline-block;margin-top:28px;color:#7560c9;text-decoration:none;font-weight:700}.login-card{background:#fff;border:1px solid #eeeaf7;border-radius:28px;padding:34px;box-shadow:0 20px 50px #5147811c}.login-card h2{font-family:'Playfair Display',serif;color:#37314f;margin-bottom:8px}.login-card-heading>p:not(.eyebrow){color:#777286;margin-bottom:24px}.login-card label{display:block;font-weight:700;font-size:.88rem;margin:14px 0 7px}.login-card input{display:block;width:100%;border:1px solid #e1ddeb;border-radius:12px;padding:12px 14px;outline:0}.login-card input:focus{border-color:#7560c9;box-shadow:0 0 0 3px #7560c926}.login-card button{margin-top:18px}.login-card button+button{margin-top:10px}.login-note{text-align:center;color:#8a8494;font-size:.8rem;margin:22px 0 0}.login-card .auth-feedback{min-height:24px;text-align:center;margin-top:16px}@media(max-width:800px){.login-layout{grid-template-columns:1fr;gap:24px;padding:28px 18px}.login-brand{padding:10px 4px;text-align:center}.login-logo{margin-bottom:24px}.login-brand h1{font-size:3rem}.login-brand>p:not(.eyebrow){margin-inline:auto}.back-home{margin-top:18px}.login-card{padding:26px}}
 .login-page .login-card .btn{display:block;width:100%;border-radius:999px;padding:12px 18px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.95rem;transition:transform .2s,box-shadow .2s}.login-page .login-card .btn:hover{transform:translateY(-2px);box-shadow:0 8px 18px #7560c926}.login-page .login-card .btn-primary{background:#7560c9;border:1px solid #7560c9;color:#fff}.login-page .login-card .btn-outline-primary{background:#fff;border:1px solid #7560c9;color:#7560c9}.login-page .login-card input{height:48px;background:#fff;color:#343044;font-size:.95rem}.login-page .login-card input::placeholder{color:#aaa5b4}.login-page .login-card-heading h2{font-size:2.2rem}.login-page .eyebrow{font-size:.72rem;letter-spacing:.16em}.login-page .back-home:hover{color:#5d49af;text-decoration:underline}
 .logout-button{border:0;border-radius:999px;background:#fff0f1;color:#a45763;padding:8px 14px;font-weight:700;font-size:.82rem}.logout-button:hover{background:#ffe0e3}.logout-button.hidden{display:none!important}@media(max-width:991px){.logout-button{width:100%;margin-top:8px;padding:10px}}
-.kids-catcher-card{margin-top:28px;padding:clamp(18px,3vw,32px);border:3px solid #fff;border-radius:30px;background:#f7f3ff;box-shadow:0 12px 28px #7560c91a}.catcher-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}.catcher-heading h3{font-family:'Playfair Display',serif;font-size:1.65rem;margin:4px 0 8px}.catcher-heading p,.catcher-instructions{color:#666276;line-height:1.55}.catcher-heading p{margin-bottom:0}.catcher-stats{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}.catcher-stats span{display:grid;gap:2px;min-width:84px;padding:9px 13px;border-radius:16px;background:#fff;text-align:center;color:#716d82;font-size:.77rem}.catcher-stats strong{color:#514781;font-size:1.05rem}.catcher-instructions{margin:18px 0 10px;font-size:.9rem}.catcher-arena{position:relative;width:100%;height:clamp(280px,45vw,420px);overflow:hidden;border:3px solid #fff;border-radius:24px;background:linear-gradient(180deg,#c9edff 0%,#e5f7ff 65%,#d8f1d1 65%,#c5e9b9 100%);touch-action:none;outline:none}.catcher-arena:focus-visible{outline:4px solid #7560c9;outline-offset:3px}.catcher-sky{position:absolute;top:14px;left:0;width:100%;text-align:center;opacity:.72;font-size:1.5rem;pointer-events:none}.catcher-items{position:absolute;inset:0;pointer-events:none}.catcher-item{position:absolute;top:0;display:grid;place-items:center;width:46px;height:46px;font-size:2rem;line-height:1;will-change:transform}.catcher-basket{position:absolute;bottom:10px;left:50%;width:58px;height:54px;display:grid;place-items:center;font-size:2.7rem;line-height:1;transform:translateX(-50%);will-change:left;z-index:2}.catcher-overlay{position:absolute;inset:0;z-index:3;display:grid;place-items:center;padding:20px;background:#eef4ffe0;text-align:center}.catcher-overlay[hidden]{display:none}.catcher-overlay>div{max-width:360px}.catcher-overlay-icon{font-size:2.5rem}.catcher-overlay h4{margin:7px 0;font-family:'Playfair Display',serif;color:#514781;font-size:1.45rem}.catcher-overlay p{color:#5f5a72;line-height:1.5}.catcher-overlay .btn{font-weight:700}.catcher-controls{display:none;justify-content:center;gap:18px;margin-top:12px}.catcher-controls button{width:64px;height:54px;border:2px solid #d8d1f3;border-radius:18px;background:#fff;color:#5d49af;font-size:1.8rem;font-weight:700;touch-action:manipulation}.catcher-controls button:active{background:#e8e2ff;transform:scale(.96)}.catcher-status{min-height:24px;margin:12px 0 0;color:#5b5770;font-size:.9rem;text-align:center}.kids-mode .kids-catcher-card{background:#edf3ff}.kids-mode .catcher-stats span{background:#fff}.kids-mode .catcher-controls button{background:#fff}@media(max-width:767px){.catcher-heading{flex-direction:column}.catcher-stats{justify-content:flex-start}.catcher-controls{display:flex}.catcher-instructions{font-size:.84rem}.catcher-arena{height:clamp(280px,76vw,390px)}}@media(prefers-reduced-motion:reduce){.catcher-controls button:active{transform:none}}
+
+
+/* Jogo de coleta da Área Kids — palco compacto para facilitar alcançar os itens. */
+.food-catcher-card{max-width:780px;margin-left:auto;margin-right:auto;text-align:left;background:#fffefc}
+.food-catcher-card>h3,.food-catcher-card>.kids-icon{text-align:center}
+.food-catcher-intro{max-width:620px;margin:0 auto 18px;color:#716e7c;line-height:1.55;text-align:center}
+.food-catcher-status{max-width:620px;margin:0 auto 12px}
+.food-catcher-status-top,.food-catcher-status-bottom,.food-catcher-scoreline{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.food-catcher-status-top{font-size:.9rem;color:#514b68;margin-bottom:7px}
+.food-catcher-meter{height:15px;border-radius:999px;background:#f0e9e8;overflow:hidden;border:1px solid #e8e1e5}
+#catcherMeterFill{height:100%;width:50%;border-radius:999px;background:#49ad70;transition:width .2s,background .2s}
+.food-catcher-status-bottom{font-size:.7rem;color:#777183;margin-top:5px}
+.food-catcher-scoreline{max-width:620px;margin:0 auto 9px;padding:8px 12px;border-radius:12px;background:#f5f1ff;color:#5d5184;font-size:.88rem}
+.food-catcher-stage{position:relative;width:min(100%,620px);margin:0 auto;border:3px solid #fff;border-radius:20px;overflow:hidden;background:linear-gradient(180deg,#e9f6ff,#f8f1ff);box-shadow:inset 0 0 0 1px #d9d5ec;line-height:0}
+#foodCatcherCanvas{display:block;width:100%;height:auto;aspect-ratio:31/17;touch-action:pan-y;cursor:crosshair}
+.food-catcher-overlay{position:absolute;inset:0;display:grid;place-items:center;padding:18px;background:#f7f4ffdc;text-align:center;line-height:1.4}
+.food-catcher-overlay[hidden]{display:none}
+.food-catcher-overlay>div{max-width:340px;padding:20px;background:#fff;border:2px solid #fff;border-radius:20px;box-shadow:0 10px 28px #51427b20}
+.food-catcher-overlay strong{font-size:1.25rem;color:#574c82}
+.food-catcher-overlay p{margin:8px 0 14px;color:#716e7c;font-size:.9rem}
+.food-catcher-hint,.food-catcher-feedback,.food-catcher-note{max-width:620px;margin:10px auto 0;font-size:.82rem;line-height:1.5;color:#716e7c}
+.food-catcher-feedback{font-weight:700;color:#65558f;min-height:22px}
+.food-catcher-note{padding:10px 12px;background:#fff8e9;border-radius:12px;color:#76664a}
+@media(min-width:992px){.food-catcher-card{max-width:760px}.food-catcher-stage{width:min(100%,560px)}.food-catcher-status,.food-catcher-scoreline,.food-catcher-hint,.food-catcher-feedback,.food-catcher-note{max-width:560px}}
+@media(max-width:575px){.food-catcher-card{padding:18px 12px}.food-catcher-status-bottom{font-size:.62rem}.food-catcher-stage{border-radius:14px}.food-catcher-overlay>div{padding:12px}.food-catcher-overlay strong{font-size:1.05rem}.food-catcher-overlay p{font-size:.78rem}}
+
+/* Layout ampliado do jogo Kids: personagem à esquerda e painel de desempenho à direita. */
+.food-catcher-card{max-width:1120px!important;padding:28px!important}
+.food-catcher-layout{display:grid;grid-template-columns:145px minmax(280px,1fr) 230px;gap:18px;align-items:stretch;margin-top:18px}
+.catcher-character-panel{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-height:280px;padding:14px 10px;border-radius:20px;background:linear-gradient(180deg,#f1edff,#eaf6ff);text-align:center;color:#574c82}
+.catcher-character{display:block;width:100px;height:170px;object-fit:contain;image-rendering:auto}
+.catcher-character-panel strong{font-size:.9rem}
+.catcher-character-panel span{font-size:.78rem;color:#716e7c;line-height:1.4}
+.food-catcher-play-column{min-width:0;display:flex;flex-direction:column;justify-content:center}
+.food-catcher-stage{width:100%;max-width:460px;margin:0 auto}
+#foodCatcherCanvas{width:100%;height:auto;aspect-ratio:23/17;touch-action:none}
+.food-catcher-hint{max-width:460px;text-align:center}
+.catcher-dashboard{display:flex;flex-direction:column;gap:12px;min-width:0}
+.catcher-score-box,.catcher-history-card{padding:13px;border:1px solid #e9e4f4;border-radius:17px;background:#fff}
+.catcher-score-box{display:grid;grid-template-columns:1fr auto;align-items:center;gap:4px 8px;color:#5d5184}
+.catcher-score-box span{font-size:.83rem;font-weight:700}
+.catcher-score-box strong{font-size:1.8rem;line-height:1.1;color:#7560c9;font-variant-numeric:tabular-nums}
+.catcher-score-box small{grid-column:1/-1;color:#817b90;font-size:.72rem}
+.catcher-dashboard .food-catcher-status{width:100%;margin:0;padding:13px;border:1px solid #e9e4f4;border-radius:17px;background:#fbfaff}
+.catcher-dashboard .food-catcher-status-top{font-size:.78rem;gap:5px}
+.catcher-dashboard .food-catcher-status-bottom{font-size:.68rem}
+.catcher-history-card{flex:1;min-height:150px}
+.catcher-history-card>strong,.catcher-history-card>span{display:block}
+.catcher-history-card>strong{font-size:.83rem;color:#514b68}
+.catcher-history-card>span{font-size:.68rem;color:#888194;margin-top:2px}
+#catcherHistoryChart{display:block;width:100%;height:auto;margin-top:8px;overflow:visible}
+.chart-axis{stroke:#bcb5cf;stroke-width:1.2}
+.chart-gridline{stroke:#e8e3f0;stroke-width:1;stroke-dasharray:3 3}
+.chart-label{font-size:8px;fill:#8b8499}
+.chart-line{fill:none;stroke:#7560c9;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.chart-dot{fill:#e47787;stroke:#fff;stroke-width:2}
+.catcher-history-legend{font-size:.65rem;color:#777183}
+.catcher-history-legend span{color:#7560c9}
+.food-catcher-feedback,.food-catcher-note{max-width:100%}
+@media(max-width:991px){.food-catcher-layout{grid-template-columns:110px minmax(0,1fr);}.catcher-character-panel{grid-row:1/3;min-height:250px}.catcher-character{width:82px;height:145px}.catcher-dashboard{grid-column:2;display:grid;grid-template-columns:1fr 1fr;align-items:stretch}.catcher-history-card{grid-column:1/-1}.food-catcher-stage{max-width:100%}}
+@media(max-width:575px){.food-catcher-card{padding:18px 12px!important}.food-catcher-layout{grid-template-columns:1fr;gap:12px}.catcher-character-panel{grid-row:auto;min-height:0;flex-direction:row;justify-content:flex-start;padding:8px 14px;text-align:left}.catcher-character{width:42px;height:66px}.catcher-character-panel span{margin-left:auto;max-width:125px;text-align:right}.food-catcher-play-column{grid-row:2}.catcher-dashboard{grid-column:1;grid-template-columns:1fr 1fr}.catcher-history-card{grid-column:1/-1}.catcher-dashboard .food-catcher-status,.catcher-score-box{padding:10px}.catcher-score-box strong{font-size:1.5rem}}
+
+
+/* Ajustes visuais: campo maior no desktop, cenário pixel-art e personagem sem distorção. */
+.food-catcher-card{max-width:1360px!important;padding:30px!important}
+.food-catcher-layout{grid-template-columns:160px minmax(520px,1fr) 255px;gap:22px}
+.catcher-character-panel{min-height:350px;background:linear-gradient(180deg,#e8f8ff 0%,#f1edff 100%);border:2px solid #fff}
+.catcher-character-visual{position:relative;width:128px;height:180px;display:grid;place-items:center}
+.catcher-character{width:128px;height:128px;object-fit:contain;image-rendering:pixelated}
+.catcher-character-face{position:absolute;top:13px;right:7px;width:38px;height:38px;display:grid;place-items:center;border:2px solid #fff;border-radius:50%;background:#fff;font-size:23px;box-shadow:0 4px 12px #493d7622}
+.food-catcher-stage{max-width:100%;width:100%;border:4px solid #fff;border-radius:22px;background:#55c8ed;box-shadow:0 12px 28px #345e7c26}
+#foodCatcherCanvas{width:100%;height:auto;aspect-ratio:16/9;touch-action:none}
+.food-catcher-hint{max-width:100%}
+.catcher-dashboard{gap:14px}
+.catcher-history-card{min-height:190px}
+@media(max-width:1199px){
+  .food-catcher-card{max-width:1120px!important}
+  .food-catcher-layout{grid-template-columns:130px minmax(390px,1fr) 225px;gap:14px}
+  .catcher-character-visual{transform:scale(.9)}
+}
+@media(max-width:991px){
+  .food-catcher-layout{grid-template-columns:120px minmax(0,1fr)}
+  .catcher-character-panel{min-height:300px}
+  .catcher-character-visual{width:100px;height:145px;transform:none}
+  .catcher-character{width:100px;height:100px}
+  .catcher-character-face{top:8px;right:0;width:32px;height:32px;font-size:19px}
+}
+@media(max-width:575px){
+  .food-catcher-card{padding:18px 12px!important}
+  .food-catcher-layout{grid-template-columns:1fr}
+  .catcher-character-panel{min-height:0}
+  .catcher-character-visual{width:62px;height:66px}
+  .catcher-character{width:62px;height:62px}
+  .catcher-character-face{top:-2px;right:-5px;width:27px;height:27px;font-size:16px}
+  #foodCatcherCanvas{aspect-ratio:16/9}
+}
+
+/* Painel de expressões e desempenho com maior destaque no desktop. */
+@media (min-width: 1200px) {
+  .food-catcher-card { max-width: 1480px !important; }
+  .food-catcher-layout { grid-template-columns: 165px minmax(520px, 1fr) 345px; gap: 24px; }
+  .catcher-dashboard { gap: 16px; }
+  .catcher-score-box, .catcher-dashboard .food-catcher-status, .catcher-history-card { padding: 18px; }
+  .catcher-score-box span, .catcher-history-card > strong { font-size: 1rem; }
+  .catcher-score-box strong { font-size: 2.2rem; }
+  .catcher-dashboard .food-catcher-status-top { font-size: .92rem; }
+  .catcher-dashboard .food-catcher-status-bottom { font-size: .78rem; }
+  .catcher-history-card { min-height: 245px; }
+  #catcherHistoryChart { margin-top: 14px; }
+  .catcher-history-card > span { font-size: .78rem; }
+}
+.catcher-character-visual { position: relative; }
+.catcher-character-face {
+  top: 0 !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%);
+  width: 54px !important;
+  height: 54px !important;
+  border: 3px solid #fff !important;
+  font-size: 37px !important;
+  line-height: 1;
+  box-shadow: 0 5px 16px #493d7633 !important;
+  z-index: 2;
+}
+@media (max-width: 1199px) {
+  .food-catcher-layout { grid-template-columns: 140px minmax(390px, 1fr) 300px; }
+}
+@media (max-width: 991px) {
+  .food-catcher-layout { grid-template-columns: 120px minmax(0, 1fr); }
+  .catcher-character-face { width: 44px !important; height: 44px !important; font-size: 30px !important; }
+}
+@media (max-width: 575px) {
+  .catcher-character-face { width: 34px !important; height: 34px !important; font-size: 24px !important; }
+}
