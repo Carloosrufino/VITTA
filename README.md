@@ -21,7 +21,6 @@ Depois acesse `http://localhost:8000`.
 - Layout adaptado para celular e computador.
 - Logo oficial do VITTA aplicada no cabeçalho.
 - Navegação por sessões com botões de avanço e retorno.
-- Jogo da cesta na área Kids, com comidas que valem pontos, bombas que retiram vidas e dificuldade progressiva.
 
 Sem configurar o banco, o site continua usando `localStorage` apenas neste navegador.
 
@@ -37,10 +36,24 @@ O botão **Entrar** abre `login.html`, que possui os fluxos de login e cadastro 
 
 O navegador continua usando JavaScript; os arquivos PHP da pasta `api/` fazem a ponte segura com o MySQL. Sem preencher `api/config.php`, o site continua funcionando localmente com `localStorage`, mas não sincroniza dados online.
 
-### Jogo da cesta (área Kids)
-
-Ative **Modo Kids** e abra **Kids** no menu ou navegue até essa seção. Pressione **Começar**; use as setas **←/→** ou **A/D** para mover a cesta no teclado. Em telas sensíveis ao toque, arraste a cesta ou toque nos botões de direção. Cada comida vale um ponto; cada bomba reduz uma vida. A rodada termina após três bombas e pode ser reiniciada pelo botão **Jogar de novo**.
-
 ### Diário alimentar em um banco já existente
 
 Se o banco atual já está criado e em uso, execute uma vez o conteúdo de `migration_diario_alimentar.sql` no phpMyAdmin. Depois, envie o novo arquivo `api/food-diary.php` e os arquivos atualizados do site para `htdocs`.
+
+
+## Atualização da Área Kids
+
+- Jogo de coleta com personagem controlável por teclado ou toque.
+- Barra fictícia de bem-estar, pontuação, dificuldade progressiva e finais de vitória/rodada encerrada.
+- O jogo esclarece que seus efeitos são regras de fantasia e não representam orientação nutricional.
+- O conteúdo educativo agora explica a diferença entre comportamento alimentar transtornado e transtorno alimentar.
+
+### Atualização do jogo da Área Kids
+
+O minijogo agora usa um layout em três áreas no computador: personagem à esquerda, área de coleta ao centro e painel de desempenho à direita. O painel mostra pontuação, barra de bem-estar fictício e um gráfico com a evolução durante a rodada. O personagem usa `assets/kids-character.png`, derivado do modelo fornecido. Em telas menores, os painéis se reorganizam para manter os controles acessíveis.
+
+
+### Atualização visual do jogo Kids
+- O cenário pixel-art fica em `assets/kids-game-background.webp`.
+- O bonequinho mantém a proporção original e recebe expressões conforme o bem-estar fictício da partida.
+- No computador, o campo de jogo usa uma área maior em formato paisagem.

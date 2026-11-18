@@ -210,7 +210,7 @@ const kidsCopy = [
 ];
 function applyKidsCopy(enabled) { kidsCopy.forEach(([selector, texts]) => { document.querySelectorAll(selector).forEach((element, index) => { if (!element.dataset.adultKidsHtml) element.dataset.adultKidsHtml = element.innerHTML; element.innerHTML = enabled ? (texts[index] || texts[0]) : element.dataset.adultKidsHtml; }); }); }
 applyKidsCopy(savedKidsMode);
-modeToggle?.addEventListener('click', () => applyKidsCopy(document.body.classList.contains('kids-mode')));
+modeToggle?.addEventListener('click', () => applyKidsCopy(!document.body.classList.contains('kids-mode')));
 function syncKidsVisibility() { const enabled = document.body.classList.contains('kids-mode'); document.querySelectorAll('a[href="#kids"]').forEach((link) => link.setAttribute('aria-hidden', String(!enabled))); if (!enabled && (sectionGroups[currentSection]?.hash === 'kids' || window.location.hash === '#kids')) showSection(0, false); }
 syncKidsVisibility();
 modeToggle?.addEventListener('click', () => setTimeout(syncKidsVisibility, 0));
@@ -284,167 +284,142 @@ if (kindnessButton && kindnessMessage) {
   kindnessButton.addEventListener('click', () => { discoveries += 1; kindnessMessage.classList.remove('reveal'); void kindnessMessage.offsetWidth; kindnessMessage.textContent = cards[Math.floor(Math.random() * cards.length)]; kindnessMessage.classList.add('reveal'); document.querySelector('#kindnessScore').textContent = `⭐ ${discoveries} descoberta${discoveries === 1 ? '' : 's'}`; });
 }
 
-// Jogo da cesta: funciona dentro da área Kids sem alterar os outros jogos.
-(() => {
-  const arena = document.querySelector('#catcherArena');
-  const basket = document.querySelector('#catcherBasket');
-  const itemsLayer = document.querySelector('#catcherItems');
-  const overlay = document.querySelector('#catcherOverlay');
-  const startButton = document.querySelector('#catcherStart');
-  if (!arena || !basket || !itemsLayer || !overlay || !startButton) return;
 
-  const scoreOutput = document.querySelector('#catcherScore');
-  const livesOutput = document.querySelector('#catcherLives');
-  const statusOutput = document.querySelector('#catcherStatus');
+// Jogo Kids: coleta de itens e histórico visual do bem-estar fictício.
+(() => {
+  const canvas = document.querySelector('#foodCatcherCanvas');
+  const startButton = document.querySelector('#catcherStart');
+  if (!canvas || !startButton) return;
+  const ctx = canvas.getContext('2d');
+  const overlay = document.querySelector('#catcherOverlay');
   const overlayTitle = document.querySelector('#catcherOverlayTitle');
   const overlayText = document.querySelector('#catcherOverlayText');
-  const food = ['🍎', '🍌', '🍓', '🥕', '🍞', '🍊', '🥑', '🍇', '🧀', '🥨'];
-  const basketWidth = 58;
-  let running = false;
-  let raf = 0;
-  let lastTime = 0;
-  let spawnElapsed = 0;
-  let score = 0;
-  let lives = 3;
-  let basketX = 0.5;
-  let direction = 0;
-  let pointerIsDown = false;
-  let objects = [];
+  const feedback = document.querySelector('#catcherFeedback');
+  const meter = document.querySelector('#catcherMeter');
+  const meterFill = document.querySelector('#catcherMeterFill');
+  const meterLabel = document.querySelector('#catcherWellbeingLabel');
+  const scoreLabel = document.querySelector('#catcherScore');
+  const moodLabel = document.querySelector('#catcherCharacterMood');
+  const characterFace = document.querySelector('#catcherCharacterFace');
+  const historyLine = document.querySelector('#catcherHistoryLine');
+  const historyDot = document.querySelector('#catcherHistoryDot');
+  const historyCaption = document.querySelector('#catcherHistoryCaption');
+  const W = canvas.width, H = canvas.height;
+  const player = { x: W / 2, y: H - 49, speed: 5.8 };
+  const characterSprite = new Image();
+  characterSprite.src = 'assets/kids-character.png';
+  const scenery = new Image();
+  scenery.src = 'assets/kids-game-background.webp';
+  const positiveItems = ['🍎', '🍌', '🥕', '🍓', '🥪', '🥑'];
+  const challengeItems = ['🍟', '🍩', '🍕', '🍪', '🧁'];
+  let items = [], keys = new Set(), wellbeing = 50, score = 0, running = false;
+  let frame = 0, animation = 0, lastSpawn = 0, pointerActive = false;
+  let wellbeingHistory = [50];
 
-  function positionBasket() {
-    const half = basketWidth / 2;
-    const x = Math.max(half, Math.min(arena.clientWidth - half, basketX * arena.clientWidth));
-    basket.style.left = `${x}px`;
+  function paintBackground() {
+    ctx.fillStyle = '#55c8ed'; ctx.fillRect(0, 0, W, H);
+    if (scenery.complete && scenery.naturalWidth) {
+      // Enquadra a paisagem em 16:9 e remove a faixa inferior com marca d'água.
+      const sourceH = scenery.height * 0.88;
+      const sourceRatio = scenery.width / sourceH;
+      const targetRatio = W / H;
+      let sx = 0, sy = 0, sw = scenery.width, sh = sourceH;
+      if (sourceRatio > targetRatio) { sw = sourceH * targetRatio; sx = (scenery.width - sw) / 2; }
+      else { sh = scenery.width / targetRatio; sy = (sourceH - sh) / 2; }
+      ctx.drawImage(scenery, sx, sy, sw, sh, 0, 0, W, H);
+    } else {
+      const gradient = ctx.createLinearGradient(0, 0, 0, H);
+      gradient.addColorStop(0, '#55c8ed'); gradient.addColorStop(1, '#b7e9a2');
+      ctx.fillStyle = gradient; ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = '#8bcf73'; ctx.fillRect(0, H - 34, W, 34);
+    }
   }
-  function showLives() {
-    livesOutput.textContent = `${'❤️'.repeat(lives)}${'🤍'.repeat(3 - lives)}`;
-    livesOutput.setAttribute('aria-label', `${lives} ${lives === 1 ? 'vida' : 'vidas'}`);
+  function draw() {
+    paintBackground();
+    ctx.font = '32px "Apple Color Emoji", "Segoe UI Emoji", sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    items.forEach(item => ctx.fillText(item.emoji, item.x, item.y));
+    if (characterSprite.complete && characterSprite.naturalWidth) {
+      const size = 54;
+      ctx.drawImage(characterSprite, player.x - size / 2, player.y - size, size, size);
+    } else {
+      ctx.font = '42px "Apple Color Emoji", "Segoe UI Emoji", sans-serif'; ctx.fillText('🧸', player.x, player.y - 22);
+    }
   }
-  function clearObjects() {
-    objects.forEach((object) => object.element.remove());
-    objects = [];
+  function updateChart() {
+    const values = wellbeingHistory;
+    const points = values.map((value, index) => {
+      const x = values.length === 1 ? 12 : 12 + (index / (values.length - 1)) * 198;
+      const y = 94 - (Math.max(0, Math.min(100, value)) / 100) * 82;
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    });
+    historyLine.setAttribute('points', points.join(' '));
+    const [lastX, lastY] = points[points.length - 1].split(',');
+    historyDot.setAttribute('cx', lastX); historyDot.setAttribute('cy', lastY);
+    historyCaption.textContent = `${values.length - 1} mudança${values.length - 1 === 1 ? '' : 's'} registrada${values.length - 1 === 1 ? '' : 's'}`;
   }
-  function reset() {
-    cancelAnimationFrame(raf);
-    running = false;
-    lastTime = 0;
-    spawnElapsed = 0;
-    score = 0;
-    lives = 3;
-    basketX = 0.5;
-    direction = 0;
-    pointerIsDown = false;
-    clearObjects();
-    scoreOutput.textContent = '0';
-    showLives();
-    positionBasket();
+  function updateMeter() {
+    const value = Math.max(0, Math.min(100, wellbeing));
+    meterLabel.textContent = `${value}%`; meter.setAttribute('aria-valuenow', String(value));
+    meterFill.style.width = `${value}%`;
+    const color = value > 65 ? '#49ad70' : value > 40 ? '#d6b84d' : value > 20 ? '#e99143' : '#d85b62';
+    meterFill.style.background = color;
+    moodLabel.textContent = value >= 70 ? 'Está radiante! ✨' : value >= 40 ? 'Vamos nessa! 💛' : value >= 20 ? 'Precisa de atenção no jogo' : 'Quase no fim da rodada';
+    if (characterFace) {
+      characterFace.textContent = value >= 80 ? '😄' : value >= 60 ? '🙂' : value >= 40 ? '😐' : value >= 20 ? '😟' : '😢';
+      characterFace.setAttribute('aria-label', value >= 80 ? 'Personagem muito feliz' : value >= 60 ? 'Personagem feliz' : value >= 40 ? 'Personagem neutro' : value >= 20 ? 'Personagem preocupado' : 'Personagem triste');
+    }
+    scoreLabel.textContent = String(score);
+    updateChart();
   }
-  function endGame() {
-    running = false;
-    cancelAnimationFrame(raf);
-    direction = 0;
-    overlay.hidden = false;
-    overlayTitle.textContent = 'Que boa brincadeira!';
-    overlayText.textContent = `Você fez ${score} ${score === 1 ? 'ponto' : 'pontos'}. Obrigado por jogar — cada tentativa é uma aventura!`;
-    startButton.textContent = 'Jogar de novo';
-    statusOutput.textContent = `Fim da rodada. Você fez ${score} ${score === 1 ? 'ponto' : 'pontos'}. Que bom que você brincou!`;
-    startButton.focus();
+  function showOverlay(title, message, buttonText) { overlayTitle.textContent = title; overlayText.textContent = message; startButton.textContent = buttonText; overlay.hidden = false; }
+  function finish(won) {
+    running = false; cancelAnimationFrame(animation);
+    if (won) {
+      feedback.textContent = 'Missão concluída! Você chegou ao objetivo. 🌟';
+      showOverlay('Você conseguiu! 🌈', 'Cada pessoa merece cuidado, respeito e acolhimento. Continue aprendendo, brincando e tratando a si mesma com carinho!', 'Jogar novamente');
+    } else {
+      feedback.textContent = 'A rodada terminou. Tudo bem tentar de novo!';
+      showOverlay('Vamos tentar novamente? 💛', 'No jogo, a barra chegou ao fim. Na vida real, nenhum alimento define a saúde de alguém. Cuidado envolve muitos aspectos e nunca precisa vir acompanhado de culpa.', 'Tentar novamente');
+    }
+    historyCaption.textContent = 'Desempenho final da rodada';
   }
-  function startGame() {
-    reset();
-    running = true;
-    overlay.hidden = true;
-    statusOutput.textContent = 'Rodada iniciada. Pegue as comidas e desvie das bombas!';
-    arena.focus({ preventScroll: true });
-    raf = requestAnimationFrame(frame);
+  function collect(item) {
+    // Os efeitos são regras de fantasia do minijogo, não afirmações nutricionais.
+    if (item.kind === 'plus') { wellbeing = Math.min(100, wellbeing + 10); score += 10; feedback.textContent = 'Item coletado! +10 pontos nesta brincadeira ✨'; }
+    else { wellbeing = Math.max(0, wellbeing - 10); score = Math.max(0, score - 5); feedback.textContent = 'Esse item mudou a barra do jogo. Continue tentando!'; }
+    wellbeingHistory.push(wellbeing);
+    updateMeter();
+    if (wellbeing >= 100) finish(true); else if (wellbeing <= 0) finish(false);
   }
   function spawn() {
-    const isBomb = Math.random() < 0.2;
-    const element = document.createElement('span');
-    element.className = 'catcher-item';
-    element.textContent = isBomb ? '💣' : food[Math.floor(Math.random() * food.length)];
-    element.setAttribute('aria-hidden', 'true');
-    const item = { element, x: 24 + Math.random() * Math.max(1, arena.clientWidth - 48), y: -48, isBomb };
-    itemsLayer.append(element);
-    objects.push(item);
+    const positive = Math.random() < 0.62, list = positive ? positiveItems : challengeItems;
+    items.push({ x: 25 + Math.random() * (W - 50), y: -22, speed: 1.8 + Math.min(frame / 1800, 2.1) + Math.random() * .8, emoji: list[Math.floor(Math.random() * list.length)], kind: positive ? 'plus' : 'minus' });
   }
-  function frame(time) {
+  function loop() {
     if (!running) return;
-    const dt = Math.min((time - (lastTime || time)) / 1000, 0.04);
-    lastTime = time;
-    const width = arena.clientWidth;
-    if (direction) basketX += direction * 0.62 * dt;
-    basketX = Math.max((basketWidth / 2) / width, Math.min(1 - (basketWidth / 2) / width, basketX));
-    positionBasket();
-
-    const speed = 155 + Math.min(score, 40) * 4;
-    const spawnEvery = Math.max(420, 1050 - score * 15);
-    spawnElapsed += dt * 1000;
-    if (spawnElapsed >= spawnEvery) {
-      spawnElapsed %= spawnEvery;
-      spawn();
+    frame++;
+    if (keys.has('arrowleft') || keys.has('a')) player.x -= player.speed;
+    if (keys.has('arrowright') || keys.has('d')) player.x += player.speed;
+    player.x = Math.max(24, Math.min(W - 24, player.x));
+    const spawnEvery = Math.max(30, 62 - Math.floor(frame / 500));
+    if (frame - lastSpawn >= spawnEvery) { spawn(); lastSpawn = frame; }
+    for (let i = items.length - 1; i >= 0; i--) {
+      const item = items[i]; item.y += item.speed;
+      if (Math.abs(item.x - player.x) < 34 && Math.abs(item.y - (player.y - 25)) < 34) { collect(item); items.splice(i, 1); if (!running) break; }
+      else if (item.y > H + 25) items.splice(i, 1);
     }
-
-    const floorY = arena.clientHeight - 58;
-    const basketCenter = basketX * width;
-    objects = objects.filter((item) => {
-      item.y += speed * dt;
-      item.element.style.transform = `translate(${item.x - 23}px, ${item.y}px)`;
-      const touchingBasket = item.y + 38 >= floorY && item.y <= floorY + 42 && Math.abs(item.x - basketCenter) < 43;
-      if (touchingBasket) {
-        item.element.remove();
-        if (item.isBomb) {
-          lives -= 1;
-          showLives();
-          statusOutput.textContent = lives ? `Ops, uma bomba! Restam ${lives} ${lives === 1 ? 'vida' : 'vidas'}. Continue brincando!` : 'A rodada terminou. Obrigado por brincar!';
-          if (!lives) endGame();
-        } else {
-          score += 1;
-          scoreOutput.textContent = String(score);
-          statusOutput.textContent = `${item.element.textContent} Ponto! Você tem ${score} ${score === 1 ? 'ponto' : 'pontos'}.`;
-        }
-        return false;
-      }
-      if (item.y > arena.clientHeight) { item.element.remove(); return false; }
-      return true;
-    });
-    if (running) raf = requestAnimationFrame(frame);
+    draw(); if (running) animation = requestAnimationFrame(loop);
   }
-  function moveByPointer(event) {
-    const bounds = arena.getBoundingClientRect();
-    basketX = (event.clientX - bounds.left) / bounds.width;
-    positionBasket();
-  }
-
-  startButton.addEventListener('click', startGame);
-  arena.addEventListener('pointerdown', (event) => { if (!running) return; pointerIsDown = true; arena.setPointerCapture?.(event.pointerId); moveByPointer(event); });
-  arena.addEventListener('pointermove', (event) => { if (running && pointerIsDown) moveByPointer(event); });
-  arena.addEventListener('pointerup', () => { pointerIsDown = false; });
-  arena.addEventListener('pointercancel', () => { pointerIsDown = false; });
-  arena.addEventListener('keydown', (event) => {
-    if (['ArrowLeft', 'ArrowRight', 'a', 'A', 'd', 'D'].includes(event.key)) event.preventDefault();
-    if (event.key === 'ArrowLeft' || event.key.toLowerCase() === 'a') direction = -1;
-    if (event.key === 'ArrowRight' || event.key.toLowerCase() === 'd') direction = 1;
+  function movePlayer(clientX) { const rect = canvas.getBoundingClientRect(); player.x = Math.max(24, Math.min(W - 24, (clientX - rect.left) * (W / rect.width))); if (!running) draw(); }
+  startButton.addEventListener('click', () => {
+    cancelAnimationFrame(animation); wellbeing = 50; score = 0; frame = 0; lastSpawn = 0; items = []; wellbeingHistory = [50]; player.x = W / 2; keys.clear(); running = true;
+    feedback.textContent = 'Boa brincadeira! Observe o gráfico e a barra do personagem.'; historyCaption.textContent = 'Acompanhe as mudanças'; updateMeter(); overlay.hidden = true; draw(); animation = requestAnimationFrame(loop);
   });
-  arena.addEventListener('keyup', (event) => {
-    if (['ArrowLeft', 'ArrowRight', 'a', 'A', 'd', 'D'].includes(event.key)) event.preventDefault();
-    if ((event.key === 'ArrowLeft' || event.key.toLowerCase() === 'a') && direction < 0) direction = 0;
-    if ((event.key === 'ArrowRight' || event.key.toLowerCase() === 'd') && direction > 0) direction = 0;
-  });
-  window.addEventListener('keyup', (event) => {
-    if (event.key === 'ArrowLeft' || event.key.toLowerCase() === 'a' || event.key === 'ArrowRight' || event.key.toLowerCase() === 'd') direction = 0;
-  });
-  window.addEventListener('blur', () => { direction = 0; pointerIsDown = false; });
-  window.addEventListener('resize', positionBasket);
-  document.querySelector('#catcherLeft')?.addEventListener('pointerdown', (event) => { event.preventDefault(); direction = -1; });
-  document.querySelector('#catcherRight')?.addEventListener('pointerdown', (event) => { event.preventDefault(); direction = 1; });
-  ['#catcherLeft', '#catcherRight'].forEach((selector) => {
-    const button = document.querySelector(selector);
-    button?.addEventListener('pointerup', () => { direction = 0; });
-    button?.addEventListener('pointercancel', () => { direction = 0; });
-    button?.addEventListener('pointerleave', () => { direction = 0; });
-    button?.addEventListener('click', () => { basketX += selector === '#catcherLeft' ? -0.12 : 0.12; positionBasket(); });
-  });
-  showLives();
-  positionBasket();
+  window.addEventListener('keydown', event => { const key = event.key.toLowerCase(); if (['arrowleft','arrowright','a','d'].includes(key) && running) { event.preventDefault(); keys.add(key); } });
+  window.addEventListener('keyup', event => keys.delete(event.key.toLowerCase()));
+  canvas.addEventListener('pointerdown', event => { pointerActive = true; canvas.setPointerCapture?.(event.pointerId); movePlayer(event.clientX); });
+  canvas.addEventListener('pointermove', event => { if (pointerActive) movePlayer(event.clientX); });
+  canvas.addEventListener('pointerup', () => { pointerActive = false; }); canvas.addEventListener('pointercancel', () => { pointerActive = false; });
+  document.addEventListener('visibilitychange', () => { if (document.hidden && running) { running = false; cancelAnimationFrame(animation); showOverlay('Pausa rápida ⏸️', 'A brincadeira foi pausada. Quando quiser, você pode começar uma nova rodada.', 'Recomeçar'); } });
+  updateMeter(); draw();
 })();
